@@ -33,7 +33,6 @@ public static class Prototype3Setup
         SetupBossPool();
         SetupParallaxBackground();
         SetupWaveHUD();
-        SetupWeaponAndBombHUD();
         SetupBossHealthBar();
         SetupMissionCompleteUI();
 
@@ -438,7 +437,8 @@ public static class Prototype3Setup
         return go.transform;
     }
 
-    // ─── HUD Wave Text ─────────────────────────────────────────────────────────
+    // ─── HUD Wave Announcement ─────────────────────────────────────────────────
+    // Wave number, score and the other stat readouts live in the Rive HUD (StarfallHudController).
 
     private static void SetupWaveHUD()
     {
@@ -454,19 +454,10 @@ public static class Prototype3Setup
         if (canvas == null) canvas = hud.GetComponentInChildren<Canvas>();
         if (canvas == null) return;
 
-        var oldWave = canvas.transform.Find("WaveText");
-        if (oldWave != null) Object.DestroyImmediate(oldWave.gameObject);
-
         var oldAnno = canvas.transform.Find("WaveAnnouncement");
         if (oldAnno != null) Object.DestroyImmediate(oldAnno.gameObject);
 
         var hudSO = new SerializedObject(hud);
-
-        var waveTextGo = CreateHUDText("WaveText", canvas.transform, "WAVE 1",
-            new Vector2(-30f, -80f), new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(1f, 1f),
-            TMPro.TextAlignmentOptions.TopRight, 36, new Color(0f, 0.9f, 1f));
-        hudSO.FindProperty("waveText").objectReferenceValue =
-            waveTextGo.GetComponent<TMPro.TextMeshProUGUI>();
 
         var announcementGo = CreateHUDText("WaveAnnouncement", canvas.transform, "WAVE 1",
             new Vector2(0f, 40f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -477,90 +468,6 @@ public static class Prototype3Setup
         hudSO.FindProperty("waveAnnouncementText").objectReferenceValue = annoTMP;
 
         hudSO.ApplyModifiedProperties();
-    }
-
-    // ─── Weapon & Bomb HUD ─────────────────────────────────────────────────────
-
-    private static void SetupWeaponAndBombHUD()
-    {
-        var hud = Object.FindAnyObjectByType<GameplayHUD>();
-        if (hud == null)
-        {
-            var hudCanvas = GameObject.Find("HUDCanvas");
-            if (hudCanvas != null) hud = hudCanvas.GetComponent<GameplayHUD>();
-        }
-
-        if (hud == null) return;
-        var canvas = hud.GetComponentInParent<Canvas>();
-        if (canvas == null) canvas = hud.GetComponentInChildren<Canvas>();
-        if (canvas == null) return;
-
-        // Clean existing
-        var oldWep = canvas.transform.Find("WeaponLevelText");
-        if (oldWep != null) Object.DestroyImmediate(oldWep.gameObject);
-
-        var oldBomb = canvas.transform.Find("BombText");
-        if (oldBomb != null) Object.DestroyImmediate(oldBomb.gameObject);
-
-        var oldBtn = canvas.transform.Find("BombButton");
-        if (oldBtn != null) Object.DestroyImmediate(oldBtn.gameObject);
-
-        var hudSO = new SerializedObject(hud);
-
-        // 1. Weapon Level Text (below HullText on the left)
-        var wepGo = CreateHUDText("WeaponLevelText", canvas.transform, "WEAPON: <color=#ffaa00>LV.1</color> |",
-            new Vector2(30f, -220f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
-            TMPro.TextAlignmentOptions.Left, 28, Color.white);
-        hudSO.FindProperty("weaponLevelText").objectReferenceValue = wepGo.GetComponent<TextMeshProUGUI>();
-
-        // 2. Bomb Counter Text (below WeaponLevelText)
-        var bombGo = CreateHUDText("BombText", canvas.transform, "BOMBS: <color=#d444ff>2</color>",
-            new Vector2(30f, -270f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
-            TMPro.TextAlignmentOptions.Left, 28, Color.white);
-        hudSO.FindProperty("bombText").objectReferenceValue = bombGo.GetComponent<TextMeshProUGUI>();
-
-        // 3. Bomb Button (bottom-right of screen for touch/click)
-        var btnGo = new GameObject("BombButton");
-        btnGo.transform.SetParent(canvas.transform, false);
-
-        var btnImage = btnGo.AddComponent<Image>();
-        btnImage.color = new Color(0.4f, 0.1f, 0.5f, 0.85f); // Deep purple
-
-        var btn = btnGo.AddComponent<Button>();
-        var colors = btn.colors;
-        colors.highlightedColor = new Color(0.6f, 0.2f, 0.75f, 1f);
-        colors.pressedColor = new Color(0.8f, 0.3f, 1f, 1f);
-        btn.colors = colors;
-
-        var btnRect = btnGo.GetComponent<RectTransform>();
-        btnRect.anchorMin = new Vector2(1f, 0f);
-        btnRect.anchorMax = new Vector2(1f, 0f);
-        btnRect.pivot = new Vector2(1f, 0f);
-        btnRect.anchoredPosition = new Vector2(-40f, 40f);
-        btnRect.sizeDelta = new Vector2(150f, 65f);
-
-        // Button Label
-        var labelGo = new GameObject("Label");
-        labelGo.transform.SetParent(btnGo.transform, false);
-        var labelTMP = labelGo.AddComponent<TextMeshProUGUI>();
-        labelTMP.text = "BOMB";
-        labelTMP.fontSize = 28;
-        labelTMP.fontStyle = FontStyles.Bold;
-        labelTMP.color = Color.white;
-        labelTMP.alignment = TextAlignmentOptions.Center;
-
-        var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");
-        if (font != null) labelTMP.font = font;
-
-        var labelRect = labelGo.GetComponent<RectTransform>();
-        labelRect.anchorMin = Vector2.zero;
-        labelRect.anchorMax = Vector2.one;
-        labelRect.sizeDelta = Vector2.zero;
-
-        hudSO.FindProperty("bombButton").objectReferenceValue = btn;
-
-        hudSO.ApplyModifiedProperties();
-        Debug.Log("[Setup] Weapon & Bomb HUD elements hooked up.");
     }
 
     // ─── Boss Health Bar ───────────────────────────────────────────────────────

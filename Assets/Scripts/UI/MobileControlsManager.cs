@@ -91,21 +91,6 @@ namespace Starfall.UI
             return Instance != null ? Instance.joystickInput : Vector2.zero;
         }
 
-        private RiveSpecialButton _cachedRiveSpecial;
-
-        public void UpdateAbilityCooldown(float current, float max, string abilityName)
-        {
-            if (max <= 0f) return;
-            if (_cachedRiveSpecial == null)
-            {
-                _cachedRiveSpecial = FindAnyObjectByType<RiveSpecialButton>();
-            }
-            if (_cachedRiveSpecial != null)
-            {
-                _cachedRiveSpecial.SetCooldownPercent(Mathf.Clamp01(current / max) * 100f);
-            }
-        }
-
         // ------------------------------------------------------------------ build
         private void BuildControls()
         {
@@ -220,11 +205,6 @@ namespace Starfall.UI
         // ================================================================== ACTION BUTTONS
         private void BuildBombButton()
         {
-            if (FindAnyObjectByType<RiveSpecialButton>() != null)
-            {
-                return;
-            }
-
             Vector2 def = new Vector2(-170f, 130f); // bottom-right area
             bombBtn = BuildActionButton(
                 "BombBtn", "BOMB", "BOMB",

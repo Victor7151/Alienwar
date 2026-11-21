@@ -12,15 +12,12 @@ using Starfall.UI.Theme;
 namespace Starfall.UI
 {
     /// <summary>
-    /// Displays Score, Shield, Hull, and Game Over state (Section 30 of GDD).
+    /// Gameplay overlay: wave announcements, mission objectives, boss bar, game-over / revive modal,
+    /// Home / Controls buttons and mobile controls. Stat readouts live in the Rive HUD (StarfallHudController).
     /// </summary>
     public class GameplayHUD : MonoBehaviour
     {
         [Header("UI References")]
-        [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private TextMeshProUGUI shieldText;
-        [SerializeField] private TextMeshProUGUI hullText;
-        [SerializeField] private TextMeshProUGUI livesText;
         [SerializeField] private GameObject gameOverPanel;
         [SerializeField] private TextMeshProUGUI finalScoreText;
         [SerializeField] private UnityEngine.UI.Button restartButton;
@@ -28,15 +25,8 @@ namespace Starfall.UI
         [SerializeField] private UnityEngine.UI.Button homeButton;
 
         [Header("Wave UI")]
-        [SerializeField] private TextMeshProUGUI waveText;
         [SerializeField] private TextMeshProUGUI waveAnnouncementText;
         [SerializeField] private float announcementDuration = 2f;
-
-        [Header("Weapons & Bombs")]
-        [SerializeField] private TextMeshProUGUI weaponLevelText;
-        [SerializeField] private TextMeshProUGUI bombText;
-        [SerializeField] private UnityEngine.UI.Button bombButton;
-
 
         [Header("Boss Health Bar UI")]
         [SerializeField] private GameObject bossBarContainer;
@@ -48,11 +38,7 @@ namespace Starfall.UI
         private PlayerHealth playerHealth;
         private PlayerCombat playerCombat;
 
-        private TextMeshProUGUI comboText;
-        private UnityEngine.UI.Image comboTimerFill;
-        private float comboPunch;
         private bool externalHudMode;
-        private RiveSpecialButton _cachedRiveSpecial;
 
         private void Awake()
         {
@@ -115,16 +101,12 @@ namespace Starfall.UI
 
         private void Start()
         {
-            OrganizeHUDLayout();
             Starfall.UI.Rive.RiveAnimationManager.EnsureInstance(transform);
             TacticalFlightTrackpad.EnsureInstance(transform);
 
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.OnScoreChanged += UpdateScore;
                 GameManager.Instance.OnGameStateChanged += OnGameStateChanged;
-                GameManager.Instance.OnComboChanged += UpdateCombo;
-                UpdateScore(GameManager.Instance.CurrentScore);
             }
 
             if (WaveManager.Instance != null)
@@ -172,50 +154,7 @@ namespace Starfall.UI
             if (waveAnnouncementText != null)
                 waveAnnouncementText.gameObject.SetActive(false);
 
-            if (bombButton != null)
-                bombButton.onClick.AddListener(OnBombButtonClicked);
-
-            EnsureAbilityButton();
-            EnsureComboUI();
             EnsureObjectivesHUD();
-        }
-
-        // ------------------------------------------------------------------
-        // Combo readout (top-right, under the wave counter)
-        // ------------------------------------------------------------------
-
-        private void EnsureComboUI()
-        {
-            if (comboText != null) return;
-            var go = new GameObject("ComboText", typeof(RectTransform));
-            go.transform.SetParent(transform, false);
-            comboText = go.AddComponent<TextMeshProUGUI>();
-            if (scoreText != null) comboText.font = scoreText.font;
-            comboText.fontSize = 22f;
-            comboText.fontStyle = FontStyles.Bold;
-            comboText.alignment = TextAlignmentOptions.Right;
-            comboText.raycastTarget = false;
-            var rt = comboText.rectTransform;
-            rt.anchorMin = rt.anchorMax = new Vector2(1f, 1f);
-            rt.pivot = new Vector2(1f, 1f);
-            rt.anchoredPosition = new Vector2(-20f, -146f);
-            rt.sizeDelta = new Vector2(280f, 30f);
-
-            var barGo = new GameObject("ComboTimer", typeof(RectTransform), typeof(UnityEngine.UI.Image));
-            barGo.transform.SetParent(go.transform, false);
-            comboTimerFill = barGo.GetComponent<UnityEngine.UI.Image>();
-            comboTimerFill.sprite = SciFiUITheme.GaugeFill;
-            comboTimerFill.type = UnityEngine.UI.Image.Type.Sliced;
-            comboTimerFill.color = new Color(1f, 0.45f, 0.95f, 0.95f);
-            comboTimerFill.raycastTarget = false;
-            var br = comboTimerFill.rectTransform;
-            br.anchorMin = new Vector2(1f, 0f);
-            br.anchorMax = new Vector2(1f, 0f);
-            br.pivot = new Vector2(1f, 1f);
-            br.anchoredPosition = new Vector2(0f, -2f);
-            br.sizeDelta = new Vector2(160f, 6f);
-
-            go.SetActive(false);
         }
 
         // ------------------------------------------------------------------
@@ -302,30 +241,6 @@ namespace Starfall.UI
                 sb.AppendLine(obj.GetStatusString());
             }
             objectivesText.text = sb.ToString().TrimEnd();
-        }
-
-        private void UpdateCombo(int kills, int multiplier)
-        {
-            if (comboText == null) return;
-            bool show = kills >= 3 && !externalHudMode;
-            comboText.gameObject.SetActive(show);
-            if (!show) return;
-
-            string color = multiplier >= 5 ? "#ff4dff" : multiplier >= 3 ? "#ffa64d" : "#ffe066";
-            comboText.text = multiplier > 1
-                ? $"<color={color}>COMBO x{multiplier}</color>  <size=16><color=#cccccc>{kills} CHAIN</color></size>"
-                : $"<size=16><color=#cccccc>{kills} CHAIN</color></size>";
-            comboPunch = 1f;
-        }
-
-        private void LateUpdate()
-        {
-            using var __perf = Starfall.Core.PerfMarkers.HudUpdate.Auto();
-            if (comboText == null || !comboText.gameObject.activeSelf) return;
-            comboPunch = Mathf.MoveTowards(comboPunch, 0f, Time.unscaledDeltaTime * 6f);
-            comboText.rectTransform.localScale = Vector3.one * (1f + 0.18f * comboPunch);
-            if (comboTimerFill != null && GameManager.Instance != null)
-                comboTimerFill.rectTransform.sizeDelta = new Vector2(160f * GameManager.Instance.ComboTimeLeft01, 4f);
         }
 
         private void EnsureHomeButton()
@@ -613,8 +528,6 @@ namespace Starfall.UI
             }
         }
 
-        private int currentLivesCached = 3;
-
         private void Update()
         {
             using var __perf = Starfall.Core.PerfMarkers.HudUpdate.Auto();
@@ -667,27 +580,8 @@ namespace Starfall.UI
             if (playerObj != null)
             {
                 playerHealth = playerObj.GetComponent<PlayerHealth>();
-                if (playerHealth != null)
-                {
-                    playerHealth.OnShieldChanged += UpdateShield;
-                    playerHealth.OnHullChanged += UpdateHull;
-                    playerHealth.OnLivesChanged += UpdateLives;
-                    currentLivesCached = playerHealth.CurrentLives;
-                    UpdateLives(playerHealth.CurrentLives, playerHealth.MaxLives);
-                    UpdateShield(playerHealth.CurrentShield, playerHealth.MaxShield);
-                    UpdateHull(playerHealth.CurrentHull, playerHealth.MaxHull);
-                }
 
                 playerCombat = playerObj.GetComponent<PlayerCombat>();
-                if (playerCombat != null)
-                {
-                    playerCombat.OnWeaponLevelChanged += UpdateWeaponLevel;
-                    playerCombat.OnBombsChanged += UpdateBombs;
-                    playerCombat.OnAbilityCooldownChanged += UpdateAbilityUI;
-                    UpdateWeaponLevel(playerCombat.WeaponLevel);
-                    UpdateBombs(playerCombat.CurrentBombs);
-                    UpdateAbilityUI(playerCombat.AbilityTimer, playerCombat.AbilityCooldown);
-                }
             }
         }
 
@@ -697,9 +591,7 @@ namespace Starfall.UI
 
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.OnScoreChanged -= UpdateScore;
                 GameManager.Instance.OnGameStateChanged -= OnGameStateChanged;
-                GameManager.Instance.OnComboChanged -= UpdateCombo;
             }
 
             if (WaveManager.Instance != null)
@@ -722,236 +614,6 @@ namespace Starfall.UI
                 Starfall.Levels.LevelManager.Instance.OnMissionCompleted -= OnMissionCompleted;
             }
 
-            if (playerHealth != null)
-            {
-                playerHealth.OnShieldChanged -= UpdateShield;
-                playerHealth.OnHullChanged -= UpdateHull;
-                playerHealth.OnLivesChanged -= UpdateLives;
-            }
-
-            if (playerCombat != null)
-            {
-                playerCombat.OnWeaponLevelChanged -= UpdateWeaponLevel;
-                playerCombat.OnBombsChanged -= UpdateBombs;
-                playerCombat.OnAbilityCooldownChanged -= UpdateAbilityUI;
-            }
-        }
-
-        private void OrganizeHUDLayout()
-        {
-            // 1. Ensure livesText exists as its own dedicated row
-            if (livesText == null)
-            {
-                var existingLives = transform.Find("LivesText")?.GetComponent<TextMeshProUGUI>();
-                if (existingLives != null)
-                {
-                    livesText = existingLives;
-                }
-                else
-                {
-                    var livesGo = new GameObject("LivesText");
-                    livesGo.transform.SetParent(transform, false);
-                    livesGo.AddComponent<RectTransform>();
-                    livesText = livesGo.AddComponent<TextMeshProUGUI>();
-                    if (shieldText != null)
-                    {
-                        livesText.font = shieldText.font;
-                        livesText.material = shieldText.material;
-                    }
-                }
-            }
-
-            // 2. Format Top-Left player status column: Lives, Shield, Hull, Weapon
-            if (livesText != null)
-            {
-                var rt = livesText.rectTransform;
-                rt.anchorMin = new Vector2(0f, 1f);
-                rt.anchorMax = new Vector2(0f, 1f);
-                rt.pivot = new Vector2(0f, 1f);
-                rt.anchoredPosition = new Vector2(25f, -15f);
-                rt.sizeDelta = new Vector2(240f, 26f);
-                livesText.fontSize = 20f;
-                livesText.fontStyle = FontStyles.Bold;
-                livesText.alignment = TextAlignmentOptions.Left;
-            }
-
-            bool hasRiveHealth = FindAnyObjectByType<RiveHealthHUD>() != null || GameObject.Find("RiveWidget_HealthHUD") != null;
-
-            if (shieldText != null)
-            {
-                if (hasRiveHealth)
-                {
-                    shieldText.gameObject.SetActive(false);
-                }
-                else
-                {
-                    var rt = shieldText.rectTransform;
-                    rt.anchorMin = new Vector2(0f, 1f);
-                    rt.anchorMax = new Vector2(0f, 1f);
-                    rt.pivot = new Vector2(0f, 1f);
-                    rt.anchoredPosition = new Vector2(25f, -44f);
-                    rt.sizeDelta = new Vector2(240f, 26f);
-                    shieldText.fontSize = 20f;
-                    shieldText.fontStyle = FontStyles.Bold;
-                    shieldText.alignment = TextAlignmentOptions.Left;
-                }
-            }
-
-            if (hullText != null)
-            {
-                if (hasRiveHealth)
-                {
-                    hullText.gameObject.SetActive(false);
-                }
-                else
-                {
-                    var rt = hullText.rectTransform;
-                    rt.anchorMin = new Vector2(0f, 1f);
-                    rt.anchorMax = new Vector2(0f, 1f);
-                    rt.pivot = new Vector2(0f, 1f);
-                    rt.anchoredPosition = new Vector2(25f, -73f);
-                    rt.sizeDelta = new Vector2(240f, 26f);
-                    hullText.fontSize = 20f;
-                    hullText.fontStyle = FontStyles.Bold;
-                    hullText.alignment = TextAlignmentOptions.Left;
-                }
-            }
-
-            if (weaponLevelText != null)
-            {
-                var rt = weaponLevelText.rectTransform;
-                rt.anchorMin = new Vector2(0f, 1f);
-                rt.anchorMax = new Vector2(0f, 1f);
-                rt.pivot = new Vector2(0f, 1f);
-                rt.anchoredPosition = hasRiveHealth ? new Vector2(25f, -125f) : new Vector2(25f, -102f);
-                rt.sizeDelta = new Vector2(260f, 26f);
-                weaponLevelText.fontSize = 17f;
-                weaponLevelText.fontStyle = FontStyles.Bold;
-                weaponLevelText.alignment = TextAlignmentOptions.Left;
-            }
-
-            if (bombText != null)
-            {
-                var rt = bombText.rectTransform;
-                rt.anchorMin = new Vector2(0f, 1f);
-                rt.anchorMax = new Vector2(0f, 1f);
-                rt.pivot = new Vector2(0f, 1f);
-                rt.anchoredPosition = hasRiveHealth ? new Vector2(25f, -152f) : new Vector2(25f, -130f);
-                rt.sizeDelta = new Vector2(260f, 26f);
-                bombText.fontSize = 17f;
-                bombText.fontStyle = FontStyles.Bold;
-                bombText.alignment = TextAlignmentOptions.Left;
-            }
-
-            // 3. Format Top-Center: Score text
-            if (scoreText != null)
-            {
-                var rt = scoreText.rectTransform;
-                rt.anchorMin = new Vector2(0.5f, 1f);
-                rt.anchorMax = new Vector2(0.5f, 1f);
-                rt.pivot = new Vector2(0.5f, 1f);
-                rt.anchoredPosition = new Vector2(0f, -12f);
-                rt.sizeDelta = new Vector2(320f, 32f);
-                scoreText.fontSize = 24f;
-                scoreText.fontStyle = FontStyles.Bold;
-                scoreText.alignment = TextAlignmentOptions.Center;
-            }
-
-            // 4. Format Top-Right: Wave text
-            if (waveText != null)
-            {
-                var rt = waveText.rectTransform;
-                rt.anchorMin = new Vector2(1f, 1f);
-                rt.anchorMax = new Vector2(1f, 1f);
-                rt.pivot = new Vector2(1f, 1f);
-                rt.anchoredPosition = new Vector2(-20f, -112f);
-                rt.sizeDelta = new Vector2(280f, 30f);
-                waveText.fontSize = 18f;
-                waveText.alignment = TextAlignmentOptions.Right;
-            }
-        }
-
-        public void UpdateLives(int current, int max)
-        {
-            currentLivesCached = current;
-            if (livesText != null)
-            {
-                string livesPrefix = $"x{current}";
-                int layers = playerHealth != null ? playerHealth.ShieldLayers : 0;
-                if (layers > 1)
-                    livesText.text = $"LIVES: <color=#ff3366>{livesPrefix}</color>  <color=#00e5ff>SHIELD x{layers}</color>";
-                else
-                    livesText.text = $"LIVES: <color=#ff3366>{livesPrefix}</color>";
-            }
-            else if (shieldText != null && playerHealth != null)
-            {
-                // Refresh shieldText so lives show up
-                UpdateShield(playerHealth.CurrentShield, playerHealth.MaxShield);
-            }
-        }
-
-        public void UpdateScore(int score)
-        {
-            if (scoreText != null)
-            {
-                scoreText.text = $"SCORE: {score:N0}";
-            }
-        }
-
-        public void UpdateShield(int current, int max)
-        {
-            int layers = max > 0 ? Mathf.CeilToInt((float)current / max) : 0;
-
-            if (shieldText != null)
-            {
-                int barCount = Mathf.Clamp(current, 0, 8);
-                string bars = new string('|', barCount);
-                string layerSuffix = layers > 1 ? $" <color=#ffd700>(x{layers})</color>" : "";
-                if (livesText == null)
-                {
-                    string livesStr = $"x{currentLivesCached}";
-                    shieldText.text = $"LIVES: <color=#ff3366>{livesStr}</color>  SHIELD: <color=#00e5ff>{bars}</color>{layerSuffix}";
-                }
-                else
-                {
-                    if (current > 8)
-                        shieldText.text = $"SHIELD: <color=#00e5ff>{current} [{bars}+]</color>{layerSuffix}";
-                    else
-                        shieldText.text = $"SHIELD: <color=#00e5ff>{bars}</color>{layerSuffix}";
-                }
-            }
-
-            if (livesText != null)
-            {
-                string livesPrefix = $"x{currentLivesCached}";
-                if (layers > 1)
-                    livesText.text = $"LIVES: <color=#ff3366>{livesPrefix}</color>  <color=#00e5ff>SHIELD x{layers}</color>";
-                else
-                    livesText.text = $"LIVES: <color=#ff3366>{livesPrefix}</color>";
-            }
-
-            if (Starfall.UI.Rive.RiveAnimationManager.Instance != null && playerHealth != null)
-            {
-                Starfall.UI.Rive.RiveAnimationManager.Instance.UpdateSlayerHealth(playerHealth.CurrentHull, playerHealth.MaxHull, current, max);
-            }
-        }
-
-        public void UpdateHull(int current, int max)
-        {
-            if (hullText != null)
-            {
-                int barCount = Mathf.Clamp(current, 0, 8);
-                string bars = new string('|', barCount);
-                if (current > 8)
-                    hullText.text = $"HULL: <color=#00ff66>{current} [{bars}+]</color>";
-                else
-                    hullText.text = $"HULL: <color=#00ff66>{bars}</color>";
-            }
-
-            if (Starfall.UI.Rive.RiveAnimationManager.Instance != null && playerHealth != null)
-            {
-                Starfall.UI.Rive.RiveAnimationManager.Instance.UpdateSlayerHealth(current, max, playerHealth.CurrentShield, playerHealth.MaxShield);
-            }
         }
 
         private GameObject scifiGameOverModalRoot;
@@ -1228,11 +890,6 @@ namespace Starfall.UI
             {
                 Starfall.UI.Rive.RiveAnimationManager.Instance.gameObject.SetActive(visible);
             }
-            var customRiveSpecial = FindAnyObjectByType<RiveSpecialButton>();
-            if (customRiveSpecial != null)
-            {
-                customRiveSpecial.gameObject.SetActive(visible);
-            }
 
             // Mobile controls if present
             var mobileMgr = MobileControlsManager.Instance ?? FindAnyObjectByType<MobileControlsManager>();
@@ -1250,25 +907,18 @@ namespace Starfall.UI
 
             // In-game HUD widgets
             if (objectivesContainer != null) objectivesContainer.SetActive(visible);
-            if (comboText != null && !visible) comboText.gameObject.SetActive(false);
             if (controlsButton != null) controlsButton.gameObject.SetActive(visible);
             if (homeButton != null) homeButton.gameObject.SetActive(visible);
-            if (bombButton != null) bombButton.gameObject.SetActive(visible && !externalHudMode);
         }
 
         /// <summary>
-        /// Hands the stat readouts (score, hull, shield, lives, wave, weapon, bombs, combo) and the
-        /// bomb / pause buttons over to an external HUD such as the Rive StarfallHudController.
-        /// Announcements, objectives, the boss bar and the game-over modal stay here.
+        /// Called once the Rive HUD (StarfallHudController) is live: it has its own pause button, so the
+        /// PauseMenu one is hidden, and Home / Controls move below its top-right panel.
         /// </summary>
         public void SetExternalHudMode(bool enabled)
         {
             externalHudMode = enabled;
             bool show = !enabled;
-            foreach (var t in new[] { scoreText, shieldText, hullText, livesText, waveText, weaponLevelText, bombText })
-                if (t != null) t.gameObject.SetActive(show);
-            if (comboText != null && enabled) comboText.gameObject.SetActive(false);
-            if (bombButton != null) bombButton.gameObject.SetActive(show);
             if (PauseMenu.Instance != null)
             {
                 var pb = PauseMenu.Instance.transform.Find("PauseButton");
@@ -1336,13 +986,6 @@ namespace Starfall.UI
 
         private void OnWaveStarted(int waveNumber, int total)
         {
-            int levelNum = Starfall.Levels.LevelManager.Instance != null ? Starfall.Levels.LevelManager.Instance.CurrentLevelNumber : 1;
-            if (waveText != null)
-            {
-                waveText.color = Color.white;
-                waveText.text = $"LEVEL {levelNum}  •  WAVE {waveNumber} / {total}";
-            }
-
             ShowAnnouncement($"WAVE {waveNumber}", new Color(0f, 0.9f, 1f));
         }
 
@@ -1353,12 +996,7 @@ namespace Starfall.UI
 
         private void OnBossFightStarted()
         {
-            // Handled via HandleBossSpawned, but keep fallback
-            if (waveText != null)
-            {
-                waveText.text = "!! BOSS INCOMING !!";
-                waveText.color = new Color(1f, 0.2f, 0.2f);
-            }
+            // The boss warning is announced in HandleBossSpawned.
         }
 
         private void OnBossPhaseChanged(int phase)
@@ -1477,12 +1115,6 @@ namespace Starfall.UI
             }
             if (bossBarFill != null) bossBarFill.enabled = !riveBar;
 
-            if (waveText != null)
-            {
-                waveText.text = "!! BOSS INCOMING !!";
-                waveText.color = new Color(1f, 0.25f, 0.25f);
-            }
-
             string bName = string.IsNullOrEmpty(bossName) ? "BOSS" : bossName.ToUpperInvariant();
             ShowAnnouncement($"WARNING: {bName}!", new Color(1f, 0.2f, 0.2f));
         }
@@ -1544,35 +1176,6 @@ namespace Starfall.UI
             waveAnnouncementText.gameObject.SetActive(false);
         }
 
-        public void UpdateWeaponLevel(int level)
-        {
-            if (weaponLevelText != null)
-            {
-                int maxPips = 5;
-                int filled = Mathf.Clamp(level, 0, maxPips);
-                string pips = new string('|', filled);
-                string emptyPips = new string('.', Mathf.Max(0, maxPips - filled));
-                weaponLevelText.text = $"WEAPON: <color=#FFD126>LV.{level}</color> <color=#00E5FF>[{pips}</color><color=#335577>{emptyPips}]</color>";
-            }
-        }
-
-        public void UpdateBombs(int bombs)
-        {
-            if (bombText != null)
-            {
-                string icons = bombs <= 4 ? new string('|', bombs) : $"{bombs}";
-                bombText.text = $"BOMBS: <color=#D444FF><b>[{icons}]</b></color>";
-            }
-        }
-
-        public void OnBombButtonClicked()
-        {
-            if (playerCombat != null)
-            {
-                playerCombat.UseBomb();
-            }
-        }
-
         private void EnsureMobileControls()
         {
             // Spawn the new MobileControlsManager which handles joystick, bomb, ability,
@@ -1598,41 +1201,6 @@ namespace Starfall.UI
                 vjGo.transform.SetParent(go.transform, false);
                 vjGo.AddComponent<VirtualJoystick>();
             }
-        }
-
-        private void EnsureAbilityButton()
-        {
-            // Destroy any legacy rectangular SpecialAbilityButton bar so only Rive Special Button is shown
-            var existing = transform.Find("SpecialAbilityButton");
-            if (existing != null)
-            {
-                Destroy(existing.gameObject);
-            }
-        }
-
-        public void UpdateAbilityUI(float current, float max)
-        {
-            if (max <= 0f) return;
-            float ratio = Mathf.Clamp01(current / max);
-
-            string shipAbility = (playerCombat != null && playerCombat.ActiveShip != null)
-                ? playerCombat.ActiveShip.abilityName : "ABILITY";
-
-            // Forward to Rive Special Button
-            if (_cachedRiveSpecial == null)
-            {
-                _cachedRiveSpecial = FindAnyObjectByType<RiveSpecialButton>();
-            }
-            if (_cachedRiveSpecial != null)
-            {
-                _cachedRiveSpecial.SetCooldownPercent(ratio * 100f);
-            }
-
-            // Forward to the mobile controls manager
-            MobileControlsManager.Instance?.UpdateAbilityCooldown(current, max, shipAbility);
-
-            if (Starfall.UI.Rive.RiveAnimationManager.Instance != null)
-                Starfall.UI.Rive.RiveAnimationManager.Instance.UpdateGauge(current, max, shipAbility);
         }
 
         public void OnAbilityButtonClicked()

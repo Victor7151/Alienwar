@@ -440,8 +440,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 511}
+  m_Children: []
   m_Father: {fileID: 401}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -544,95 +543,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rive.Runtime.Components::Rive.Components.PanelContextPreviewManager
   m_rivePanel: {fileID: 502}
---- !u!1 &510
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 511}
-  - component: {fileID: 512}
-  - component: {fileID: 513}
-  m_Layer: 0
-  m_Name: RiveWidget_HealthHUD
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &511
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 501}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 25, y: -25}
-  m_SizeDelta: {x: 420, y: 206}
-  m_Pivot: {x: 0, y: 1}
---- !u!114 &512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30b5bc34e03734ee49f044caba90a384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rive.Runtime.Components::Rive.Components.RiveWidget
-  m_rivePanel: {fileID: 502}
-  m_asset: {fileID: -4516626237390682484, guid: 32f64d82e92180f46b771c9a490f7d13, type: 3}
-  m_artboardName: HealthHUD
-  m_stateMachineName: Statemachine 1
-  m_fit: 1
-  m_alignment:
-    m_x: -1
-    m_y: -1
-  m_layoutScaleFactor: 1
-  m_layoutScalingMode: 1
-  m_fallbackDPI: 96
-  m_referenceDPI: 150
-  m_hitTestBehavior: 3
-  m_eventPoolingMode: 0
-  m_speed: 1
-  m_dataBindingMode: 0
-  m_viewModelInstanceName: 
-  m_customAudioProvider: {fileID: 0}
---- !u!114 &513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bc20f9c33727334bb8df7eda0c6dc2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RiveHealthHUD
-  widget: {fileID: 512}
-  _health: 100
-  _shield: 100
-  _heat: 0
-  autoPositionAndScale: 1
-  hudPosition: {x: 25, y: -25}
-  hudSize: {x: 420, y: 206}
-  hidePlainTextBars: 1
-  hideWhileLoading: 1
-  fadeInDuration: 0.15
 --- !u!1 &600
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,8 +576,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 611}
+  m_Children: []
   m_Father: {fileID: 401}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -770,96 +679,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rive.Runtime.Components::Rive.Components.PanelContextPreviewManager
   m_rivePanel: {fileID: 602}
---- !u!1 &610
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 611}
-  - component: {fileID: 612}
-  - component: {fileID: 613}
-  m_Layer: 0
-  m_Name: RiveWidget_SpecialButton
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &611
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 601}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -150, y: 160}
-  m_SizeDelta: {x: 250, y: 250}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30b5bc34e03734ee49f044caba90a384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rive.Runtime.Components::Rive.Components.RiveWidget
-  m_rivePanel: {fileID: 602}
-  m_asset: {fileID: -4516626237390682484, guid: e8d2d24dbbec0a94aae9a330e8700a33, type: 3}
-  m_artboardName: SpecialButton
-  m_stateMachineName: ButtonSM
-  m_fit: 1
-  m_alignment:
-    m_x: 0
-    m_y: 0
-  m_layoutScaleFactor: 1
-  m_layoutScalingMode: 1
-  m_fallbackDPI: 96
-  m_referenceDPI: 150
-  m_hitTestBehavior: 0
-  m_eventPoolingMode: 0
-  m_speed: 1
-  m_dataBindingMode: 0
-  m_viewModelInstanceName: 
-  m_customAudioProvider: {fileID: 0}
---- !u!114 &613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bc20f9c33727334bb8df7eda0c6dc30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Starfall.UI.RiveSpecialButton
-  widget: {fileID: 612}
-  cooldownDuration: 8
-  currentCooldown: 100
-  autoPositionAndScale: 1
-  buttonPosition: {x: -150, y: 160}
-  buttonSize: {x: 250, y: 250}
-  triggerPlayerBomb: 0
-  showVisualPlaceholder: 0
-  OnAbilityUsed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

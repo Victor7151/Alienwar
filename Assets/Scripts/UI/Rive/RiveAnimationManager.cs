@@ -11,12 +11,11 @@ namespace Starfall.UI.Rive
     /// <summary>
     /// Drives the project's Rive animations during gameplay (files live in Assets/Resources/Rive):
     ///   boss_health_bar.riv   – boss / mini-boss health  (view-model number "hp", 0-100)
-    ///   player_health_bar.riv – ship integrity           ("currentHealth" 0-100, "takedamage" trigger)
-    ///   gauge_meter.riv       – special ability charge   (artboard "gauge", "value" 0-100)
     ///   wave_complete.riv     – wave cleared celebration (one-shot, restarted per wave)
     ///   checkpoint.riv        – checkpoint / new-threat banner
     ///   frame_ui.riv          – pulsing warning frame when a boss arrives
-    /// (loading.riv is used by <see cref="Starfall.UI.LoadingScreen"/>.)
+    /// (loading.riv is used by <see cref="Starfall.UI.LoadingScreen"/>; the player HUD is
+    /// starfall_hud.riv, driven by <see cref="Starfall.UI.StarfallHudController"/>.)
     ///
     /// Each element falls back to a plain UGUI version if Rive is unavailable, so the HUD always works.
     /// </summary>
@@ -26,16 +25,12 @@ namespace Starfall.UI.Rive
 
         [Header("Rive value ranges (match the .riv files)")]
         [SerializeField] private float bossHpMax = 100f;
-        [SerializeField] private float playerHealthMax = 100f;
-        [SerializeField] private float gaugeMax = 100f;
 
         [Header("Toggle")]
         [Tooltip("Turn off to force the plain UGUI fallbacks (useful when profiling low-end devices).")]
         [SerializeField] private bool useRive = true;
 
         private RiveHudElement bossBar;
-        private RiveHudElement playerBar;
-        private RiveHudElement gauge;
         private RiveHudElement waveComplete;
         private RiveHudElement checkpoint;
         private RiveHudElement warningFrame;
@@ -45,14 +40,10 @@ namespace Starfall.UI.Rive
         private TextMeshProUGUI waveText;
         private CanvasGroup checkpointGroup;
         private TextMeshProUGUI checkpointText;
-        private Image gaugeFallbackFill;
-        private TextMeshProUGUI gaugeText;
-        private GameObject gaugeFallbackRoot;
 
         private Coroutine waveRoutine;
         private Coroutine checkpointRoutine;
         private Coroutine frameRoutine;
-        private float lastPlayerHealth01 = -1f;
         private bool bossVisible;
 
         /// <summary>True when the Rive boss bar is rendering, so the HUD can hide its own bar graphic.</summary>
@@ -83,22 +74,18 @@ namespace Starfall.UI.Rive
             if (!on)
             {
                 if (parked == null)
-                    parked = new[] { bossBar, playerBar, gauge, waveComplete, warningFrame };
+                    parked = new[] { bossBar, waveComplete, warningFrame };
                 foreach (var el in parked) el?.SetActive(false);
-                bossBar = playerBar = gauge = waveComplete = warningFrame = null;
-                if (gaugeFallbackRoot != null) gaugeFallbackRoot.SetActive(true);
+                bossBar = waveComplete = warningFrame = null;
                 return;
             }
 
             if (parked != null)
             {
-                bossBar = parked[0]; playerBar = parked[1]; gauge = parked[2]; waveComplete = parked[3]; warningFrame = parked[4];
+                bossBar = parked[0]; waveComplete = parked[1]; warningFrame = parked[2];
                 parked = null;
             }
-            playerBar?.SetActive(true);
-            gauge?.SetActive(true);
             bossBar?.SetActive(bossVisible);
-            if (gauge != null && gaugeFallbackRoot != null) gaugeFallbackRoot.SetActive(false);
             if (!riveBuilt && !riveBuilding) StartCoroutine(BuildRiveAsync());
         }
 
@@ -109,8 +96,6 @@ namespace Starfall.UI.Rive
             {
                 int n = 0;
                 if (bossBar?.Root != null && bossBar.Root.activeInHierarchy) n++;
-                if (playerBar?.Root != null && playerBar.Root.activeInHierarchy) n++;
-                if (gauge?.Root != null && gauge.Root.activeInHierarchy) n++;
                 if (waveComplete?.Root != null && waveComplete.Root.activeInHierarchy) n++;
                 if (warningFrame?.Root != null && warningFrame.Root.activeInHierarchy) n++;
                 return n;
@@ -221,7 +206,6 @@ namespace Starfall.UI.Rive
         private void BuildUGUI()
         {
             Transform root = CanvasRoot();
-            BuildGaugeFallback(root);
 
             var waveGo = new GameObject("WaveCompleteLabel", typeof(RectTransform), typeof(CanvasGroup));
             waveGo.transform.SetParent(root, false);
@@ -247,37 +231,6 @@ namespace Starfall.UI.Rive
         private IEnumerator BuildRiveAsync()
         {
             riveBuilding = true;
-            // If RiveHealthHUD exists in the scene, it handles the health HUD; avoid spawning duplicate bars!
-            bool hasCustomHealthHUD = FindAnyObjectByType<RiveHealthHUD>() != null || GameObject.Find("RiveWidget_HealthHUD") != null;
-            if (!hasCustomHealthHUD)
-            {
-                yield return TryRiveAsync("PlayerHealthBar", "Rive/player_health_bar", e => playerBar = e);
-                if (playerBar == null)
-                {
-                    yield return TryRiveAsync("PlayerHealthBar", "Rive/alienwarhud", e => playerBar = e, "HealthHUD", "Statemachine 1");
-                }
-                playerBar?.Place(new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(18f, -128f), new Vector2(300f, 64f));
-            }
-
-            // If RiveSpecialButton exists, it handles the ability/bomb button; skip redundant gauge_meter.riv loading!
-            bool hasCustomSpecial = FindAnyObjectByType<Starfall.UI.RiveSpecialButton>() != null || GameObject.Find("RiveWidget_SpecialButton") != null || GameObject.Find("SpecialButton") != null;
-            if (!hasCustomSpecial)
-            {
-                yield return TryRiveAsync("AbilityGauge", "Rive/gauge_meter", e => gauge = e, "gauge", "gaugeStateMachine");
-                if (gauge != null)
-                {
-                    gauge.Rect.anchorMin = new Vector2(0.86f, 0.255f);
-                    gauge.Rect.anchorMax = new Vector2(0.97f, 0.325f);
-                    gauge.Rect.offsetMin = Vector2.zero;
-                    gauge.Rect.offsetMax = Vector2.zero;
-                    if (gaugeFallbackRoot != null) gaugeFallbackRoot.SetActive(false);
-                }
-            }
-            else
-            {
-                if (gaugeFallbackRoot != null) gaugeFallbackRoot.SetActive(false);
-            }
-
             checkpoint = null;
 
             // Mark HUD ready immediately so scene startup experiences 0ms Rive stall!
@@ -287,7 +240,8 @@ namespace Starfall.UI.Rive
 
             // Defer non-critical assets (WaveComplete) into background after initial frame settles
             StartCoroutine(DeferredLoadWaveComplete());
-            Debug.Log($"[Rive] Startup HUD ready (fast bootstrap). Boss deferred. Player:{playerBar != null} Gauge:{gauge != null}");
+            Debug.Log("[Rive] Startup HUD ready (fast bootstrap). Boss deferred.");
+            yield break;
         }
 
         private IEnumerator DeferredLoadWaveComplete()
@@ -303,34 +257,6 @@ namespace Starfall.UI.Rive
                     waveGroup.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -190f);
                 }
             }
-        }
-
-        private void BuildGaugeFallback(Transform root)
-        {
-            gaugeFallbackRoot = new GameObject("AbilityGaugeFallback", typeof(RectTransform));
-            gaugeFallbackRoot.transform.SetParent(root, false);
-            var rt = gaugeFallbackRoot.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0.85f, 0.255f);
-            rt.anchorMax = new Vector2(0.98f, 0.27f);
-            rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.zero;
-
-            var track = gaugeFallbackRoot.AddComponent<Image>();
-            track.color = new Color(0.1f, 0.15f, 0.25f, 0.75f);
-            track.raycastTarget = false;
-
-            var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
-            fill.transform.SetParent(gaugeFallbackRoot.transform, false);
-            gaugeFallbackFill = fill.GetComponent<Image>();
-            gaugeFallbackFill.color = new Color(0.2f, 0.85f, 1f, 1f);
-            gaugeFallbackFill.raycastTarget = false;
-            var frt = gaugeFallbackFill.rectTransform;
-            frt.anchorMin = Vector2.zero;
-            frt.anchorMax = Vector2.one;
-            frt.offsetMin = Vector2.zero;
-            frt.offsetMax = Vector2.zero;
-
-            gaugeText = MakeText(gaugeFallbackRoot.transform, "Label", 12f, new Vector2(0.5f, 1f), new Vector2(0f, 10f), new Vector2(220f, 18f));
         }
 
         // ------------------------------------------------------------------
@@ -479,45 +405,6 @@ namespace Starfall.UI.Rive
                 yield return null;
             }
             if (!bossVisible) bossBar.SetActive(false);
-        }
-
-        // ------------------------------------------------------------------
-        // Player integrity & ability gauge
-        // ------------------------------------------------------------------
-
-        public void UpdateSlayerHealth(int currentHull, int maxHull, int currentShield, int maxShield)
-        {
-            if (playerBar == null) return;
-            int max = Mathf.Max(1, maxHull + maxShield);
-            float v01 = Mathf.Clamp01((float)(currentHull + currentShield) / max);
-            playerBar.SetNumber("currentHealth", v01 * playerHealthMax);
-            if (lastPlayerHealth01 >= 0f && v01 < lastPlayerHealth01 - 0.001f)
-            {
-                playerBar.Fire("takedamage");
-                playerBar.Fire("hit");
-            }
-            lastPlayerHealth01 = v01;
-
-            // Also drive separate health and shield inputs if the Rive HUD supports dual layers (e.g. alienwarhud)
-            if (maxHull > 0)
-                playerBar.SetNumber("health", Mathf.Clamp01((float)currentHull / maxHull) * 100f);
-            if (maxShield > 0)
-                playerBar.SetNumber("shield", Mathf.Clamp01((float)currentShield / maxShield) * 100f);
-        }
-
-        public void UpdateGauge(float current, float max = 1f, string label = "TACTICAL CORE")
-        {
-            float v01 = max > 0f ? Mathf.Clamp01(current / max) : 0f;
-            gauge?.SetNumber("value", v01 * gaugeMax);
-
-            if (gaugeFallbackFill != null)
-                gaugeFallbackFill.rectTransform.anchorMax = new Vector2(v01, 1f);
-
-            if (gaugeText != null)
-            {
-                string status = v01 >= 1f ? "<color=#00ff66>READY</color>" : $"{v01 * 100f:F0}%";
-                gaugeText.text = $"<color=#66ddff><b>{label}: {status}</b></color>";
-            }
         }
     }
 }

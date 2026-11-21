@@ -21,7 +21,6 @@ namespace Starfall.UI
     /// <summary>
     /// Drives the Rive gameplay HUD (Resources/Rive/starfall_hud.riv, artboard "HUD", view model "HudVM")
     /// from the live game, and routes its ability / bomb / pause buttons back into gameplay.
-    /// While it is running, the legacy HUD readouts are hidden; if the .riv fails to load they stay.
     /// Installs itself only in the scenes listed in <see cref="EnabledScenes"/>.
     /// </summary>
     public class StarfallHudController : MonoBehaviour
@@ -36,9 +35,6 @@ namespace Starfall.UI
         private const string StateMachineName = "Main";
         private const string ViewModelName = "HudVM";
 
-        // Legacy Rive HUD pieces built by RiveAnimationManager ("Rive_" + element name).
-        private static readonly string[] LegacyRiveRoots = { "Rive_PlayerHealthBar", "Rive_AbilityGauge" };
-
         public static StarfallHudController Instance { get; private set; }
 
         private RiveWidget widget;
@@ -52,7 +48,6 @@ namespace Starfall.UI
         private bool ready;
         private float shownScore;
         private int lastMultiplier = 1;
-        private float legacySweepTimer;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void InstallHook()
@@ -106,7 +101,6 @@ namespace Starfall.UI
 
             HookGame();
             GameplayHUD.Instance?.SetExternalHudMode(true);
-            HideLegacyRive();
             ready = true;
             Debug.Log("[StarfallHud] Rive HUD loaded and bound to HudVM.");
         }
@@ -253,14 +247,6 @@ namespace Starfall.UI
                 Send("wave", waves.CurrentWaveNumber);
                 Send("totalWaves", waves.TotalWaves);
             }
-
-            // Legacy HUD pieces are created asynchronously and re-shown after a revive.
-            legacySweepTimer -= Time.unscaledDeltaTime;
-            if (legacySweepTimer <= 0f)
-            {
-                legacySweepTimer = 1f;
-                HideLegacyRive();
-            }
         }
 
         private void Send(string name, float value)
@@ -294,18 +280,5 @@ namespace Starfall.UI
         }
 
         private void OnPausePressed() => PauseMenu.Instance?.Toggle();
-
-        private static void HideLegacyRive()
-        {
-            foreach (var name in LegacyRiveRoots)
-            {
-                var go = GameObject.Find(name);
-                if (go != null) go.SetActive(false);
-            }
-            foreach (var b in FindObjectsByType<RiveSpecialButton>())
-                if (b.gameObject.activeSelf) b.gameObject.SetActive(false);
-            foreach (var h in FindObjectsByType<RiveHealthHUD>())
-                if (h.gameObject.activeSelf) h.gameObject.SetActive(false);
-        }
     }
 }
