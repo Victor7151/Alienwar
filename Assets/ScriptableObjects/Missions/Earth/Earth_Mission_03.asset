@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1234567890abcdef1234567890abcdef, type: 3}
+  m_Name: Earth_Mission_03
+  m_EditorClassIdentifier: Assembly-CSharp::Starfall.Levels.MissionData
+  missionId: MISSION_EARTH_03
+  worldId: WORLD_EARTH
+  missionNumber: 3
+  displayName: Orbital Defense
+  description: The invaders are shattering space debris towards our satellites. Clear the asteroid belt under heavy fire.
+  waves:
+  - waveName: Debris Field Grid
+    enemyCount: 24
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.04
+    fighterRatio: 0.2
+    formation: 0
+    spawnAsteroid: 1
+  - waveName: Asteroid Chevron
+    enemyCount: 24
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.04
+    fighterRatio: 0.3
+    formation: 2
+    spawnAsteroid: 1
+  - waveName: Heavy Meteors Grid
+    enemyCount: 30
+    gridRows: 3
+    gridColumns: 10
+    spawnInterval: 0.035
+    fighterRatio: 0.4
+    formation: 0
+    spawnAsteroid: 1
+  - waveName: Belt Clearance Grid
+    enemyCount: 30
+    gridRows: 3
+    gridColumns: 10
+    spawnInterval: 0.035
+    fighterRatio: 0.45
+    formation: 0
+    spawnAsteroid: 1
+  restBetweenWaves: 2.5
+  hasBoss: 0
+  bossPoolKey: 
+  bossSpawnDelay: 0
+  bossSpawnPosition: {x: 0, y: 8.5, z: 0}
+  starCreditsReward: 200
+  scoreTarget: 2200
+  isWarpMission: 0

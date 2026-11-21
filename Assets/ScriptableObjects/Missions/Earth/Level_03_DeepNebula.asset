@@ -1,0 +1,289 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1234567890abcdef1234567890abcdef, type: 3}
+  m_Name: Level_03_DeepNebula
+  m_EditorClassIdentifier: Assembly-CSharp::Starfall.Levels.MissionData
+  missionId: MISSION_EARTH_03
+  worldId: WORLD_DEEP_NEBULA
+  missionNumber: 3
+  displayName: 'Deep Nebula: Hive Core'
+  description: Enter the alien nesting nebula. Survive relentless alien hordes and the Hive Dread-Stalker, then confront the Hive Queen herself!
+  introCutscene: {fileID: 0}
+  waves:
+  - waveName: Bio-Scout Flankers
+    enemyCount: 36
+    gridRows: 4
+    gridColumns: 9
+    spawnInterval: 0.026
+    fighterRatio: 0.5
+    formation: 7
+    secondaryFormation: 6
+    totalSets: 4
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 1: BIO-SCOUT FLANKERS (4 REINFORCEMENT SETS)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.8
+    fireIntervalMax: 1.3
+    formationSwaySpeed: 1.8
+    enemyHealthMultiplier: 1.8
+    projectileSpeedMultiplier: 1.35
+    doubleShotChance: 0.45
+    diveIntervalMin: 3
+    diveIntervalMax: 4.5
+    aimedShotChance: 0.4
+  - waveName: Venomous Crescent
+    enemyCount: 38
+    gridRows: 4
+    gridColumns: 10
+    spawnInterval: 0.025
+    fighterRatio: 0.55
+    formation: 6
+    secondaryFormation: 5
+    totalSets: 4
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 2: VENOMOUS CRESCENT (4 SETS)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.75
+    fireIntervalMax: 1.2
+    formationSwaySpeed: 1.9
+    enemyHealthMultiplier: 2
+    projectileSpeedMultiplier: 1.4
+    doubleShotChance: 0.5
+    diveIntervalMin: 2.8
+    diveIntervalMax: 4.2
+    aimedShotChance: 0.45
+  - waveName: Hive Pincer Claws
+    enemyCount: 40
+    gridRows: 4
+    gridColumns: 10
+    spawnInterval: 0.024
+    fighterRatio: 0.6
+    formation: 3
+    secondaryFormation: 7
+    totalSets: 4
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 3: HIVE PINCER CLAWS (4 SETS)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.7
+    fireIntervalMax: 1.15
+    formationSwaySpeed: 2
+    enemyHealthMultiplier: 2.2
+    projectileSpeedMultiplier: 1.45
+    doubleShotChance: 0.55
+    diveIntervalMin: 2.5
+    diveIntervalMax: 3.8
+    aimedShotChance: 0.5
+  - waveName: Nebula Ion Barrier
+    enemyCount: 42
+    gridRows: 4
+    gridColumns: 11
+    spawnInterval: 0.022
+    fighterRatio: 0.65
+    formation: 4
+    secondaryFormation: 6
+    totalSets: 5
+    spawnAsteroid: 1
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 4: NEBULA ION BARRIER (5 SETS - EXTREME SURGE)'
+    interwaveEventAfter: 1
+    fireIntervalMin: 0.65
+    fireIntervalMax: 1.1
+    formationSwaySpeed: 2.1
+    enemyHealthMultiplier: 2.4
+    projectileSpeedMultiplier: 1.5
+    doubleShotChance: 0.6
+    diveIntervalMin: 2.2
+    diveIntervalMax: 3.5
+    aimedShotChance: 0.55
+  - waveName: HIVE DREAD-STALKER
+    enemyCount: 20
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.03
+    fighterRatio: 0.7
+    formation: 5
+    secondaryFormation: 6
+    totalSets: 4
+    spawnAsteroid: 0
+    isMiniBossWave: 1
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Hive Dread-Stalker
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WARNING: HIVE DREAD-STALKER DETECTED (4 SETS)!'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.6
+    fireIntervalMax: 1
+    formationSwaySpeed: 2.2
+    enemyHealthMultiplier: 2.6
+    projectileSpeedMultiplier: 1.55
+    doubleShotChance: 0.65
+    diveIntervalMin: 2
+    diveIntervalMax: 3.2
+    aimedShotChance: 0.6
+  - waveName: Royal Brood Swarm
+    enemyCount: 42
+    gridRows: 4
+    gridColumns: 11
+    spawnInterval: 0.022
+    fighterRatio: 0.75
+    formation: 6
+    secondaryFormation: 5
+    totalSets: 5
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 6: ROYAL BROOD SWARM (5 SETS)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.55
+    fireIntervalMax: 0.95
+    formationSwaySpeed: 2.3
+    enemyHealthMultiplier: 2.8
+    projectileSpeedMultiplier: 1.6
+    doubleShotChance: 0.7
+    diveIntervalMin: 1.8
+    diveIntervalMax: 3
+    aimedShotChance: 0.65
+  - waveName: Spore Spreader Echelon
+    enemyCount: 45
+    gridRows: 4
+    gridColumns: 11
+    spawnInterval: 0.02
+    fighterRatio: 0.8
+    formation: 8
+    secondaryFormation: 6
+    totalSets: 5
+    spawnAsteroid: 1
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 7: SPORE SPREADER ECHELON (5 SETS)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.5
+    fireIntervalMax: 0.9
+    formationSwaySpeed: 2.4
+    enemyHealthMultiplier: 3
+    projectileSpeedMultiplier: 1.65
+    doubleShotChance: 0.75
+    diveIntervalMin: 1.6
+    diveIntervalMax: 2.8
+    aimedShotChance: 0.7
+  - waveName: TWIN STALKER VANGUARD
+    enemyCount: 24
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.025
+    fighterRatio: 0.85
+    formation: 5
+    secondaryFormation: 7
+    totalSets: 4
+    spawnAsteroid: 1
+    isMiniBossWave: 1
+    miniBossCount: 2
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Twin Dread-Stalker
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WARNING: TWIN DREAD-STALKERS INBOUND (4 SETS)!'
+    interwaveEventAfter: 1
+    fireIntervalMin: 0.48
+    fireIntervalMax: 0.85
+    formationSwaySpeed: 2.5
+    enemyHealthMultiplier: 3.2
+    projectileSpeedMultiplier: 1.7
+    doubleShotChance: 0.8
+    diveIntervalMin: 1.5
+    diveIntervalMax: 2.5
+    aimedShotChance: 0.75
+  - waveName: Apex Hive Armada
+    enemyCount: 48
+    gridRows: 4
+    gridColumns: 11
+    spawnInterval: 0.018
+    fighterRatio: 0.9
+    formation: 5
+    secondaryFormation: 6
+    totalSets: 5
+    spawnAsteroid: 1
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 9: APEX HIVE ARMADA (5 SETS - APEX SWARM!)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.42
+    fireIntervalMax: 0.78
+    formationSwaySpeed: 2.7
+    enemyHealthMultiplier: 3.6
+    projectileSpeedMultiplier: 1.8
+    doubleShotChance: 0.85
+    diveIntervalMin: 1.3
+    diveIntervalMax: 2.2
+    aimedShotChance: 0.8
+  - waveName: HIVE QUEEN LEVIATHAN
+    enemyCount: 0
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.05
+    fighterRatio: 0
+    formation: 0
+    secondaryFormation: 2
+    totalSets: 1
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'FINAL WARNING: HIVE QUEEN LEVIATHAN AWAKENED!'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.8
+    fireIntervalMax: 1.5
+    formationSwaySpeed: 1.3
+    enemyHealthMultiplier: 1
+    projectileSpeedMultiplier: 1
+    doubleShotChance: 0.25
+    diveIntervalMin: 3.5
+    diveIntervalMax: 5.5
+    aimedShotChance: 0.2
+  restBetweenWaves: 2.5
+  hasBoss: 1
+  bossPoolKey: HiveQueenBoss
+  bossSpawnDelay: 2
+  bossSpawnPosition: {x: 0, y: 7.5, z: 0}
+  starCreditsReward: 3500
+  scoreTarget: 35000
+  isWarpMission: 1

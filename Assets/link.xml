@@ -1,0 +1,15 @@
+<linker>
+  <!-- Preserve all Rive Runtime classes, delegates, MonoPInvokeCallbacks, and P/Invoke bindings -->
+  <assembly fullname="Rive.Runtime" preserve="all"/>
+  <assembly fullname="Rive.Runtime.Components" preserve="all"/>
+
+  <!-- Preserve Unity Input System and UI Event System callbacks -->
+  <assembly fullname="Unity.InputSystem" preserve="all"/>
+  <assembly fullname="UnityEngine.UI" preserve="all"/>
+  <assembly fullname="Unity.TextMeshPro" preserve="all"/>
+
+  <!-- Preserve core gameplay and UI assemblies -->
+  <assembly fullname="Assembly-CSharp" preserve="all"/>
+  <assembly fullname="UnityEngine.CoreModule" preserve="all"/>
+  <assembly fullname="UnityEngine.AudioModule" preserve="all"/>
+</linker>

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1234567890abcdef1234567890abcdef, type: 3}
+  m_Name: Earth_Mission_06
+  m_EditorClassIdentifier: Assembly-CSharp::Starfall.Levels.MissionData
+  missionId: MISSION_EARTH_06
+  worldId: WORLD_EARTH
+  missionNumber: 6
+  displayName: The Warp
+  description: The alien flagship has entered high orbit! Destroy the Invader Carrier and engage the Starfall gateway.
+  waves:
+  - waveName: Fleet Spearhead
+    enemyCount: 24
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.04
+    fighterRatio: 0.5
+    formation: 2
+    spawnAsteroid: 0
+  - waveName: Pincer Escorts Grid
+    enemyCount: 24
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.04
+    fighterRatio: 0.5
+    formation: 0
+    spawnAsteroid: 0
+  - waveName: Mothership Guard Grid
+    enemyCount: 30
+    gridRows: 3
+    gridColumns: 10
+    spawnInterval: 0.035
+    fighterRatio: 0.6
+    formation: 0
+    spawnAsteroid: 1
+  - waveName: Carrier Approach Grid
+    enemyCount: 30
+    gridRows: 3
+    gridColumns: 10
+    spawnInterval: 0.035
+    fighterRatio: 0.7
+    formation: 0
+    spawnAsteroid: 0
+  restBetweenWaves: 2.5
+  hasBoss: 1
+  bossPoolKey: InvaderCarrier
+  bossSpawnDelay: 2.5
+  bossSpawnPosition: {x: 0, y: 8.5, z: 0}
+  starCreditsReward: 600
+  scoreTarget: 7000
+  isWarpMission: 1

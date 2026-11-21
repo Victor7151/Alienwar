@@ -1,0 +1,289 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1234567890abcdef1234567890abcdef, type: 3}
+  m_Name: Earth_Mission_01
+  m_EditorClassIdentifier: Assembly-CSharp::Starfall.Levels.MissionData
+  missionId: MISSION_EARTH_01
+  worldId: WORLD_EARTH
+  missionNumber: 1
+  displayName: 'Earth Orbit: Vanguard'
+  description: Alien battle formations are entering Earth orbit. Clear 10 escalating waves including enemy gunships and defeat the Flagship Carrier!
+  introCutscene: {fileID: 0}
+  waves:
+  - waveName: Scout Armada Alpha
+    enemyCount: 32
+    gridRows: 4
+    gridColumns: 8
+    spawnInterval: 0.035
+    fighterRatio: 0
+    formation: 0
+    secondaryFormation: 5
+    totalSets: 2
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 
+    interwaveEventAfter: 0
+    fireIntervalMin: 1.4
+    fireIntervalMax: 2.2
+    formationSwaySpeed: 1
+    enemyHealthMultiplier: 1
+    projectileSpeedMultiplier: 0.9
+    doubleShotChance: 0.1
+    diveIntervalMin: 6
+    diveIntervalMax: 8.5
+    aimedShotChance: 0
+  - waveName: Dual Flanking Incursion
+    enemyCount: 32
+    gridRows: 4
+    gridColumns: 8
+    spawnInterval: 0.03
+    fighterRatio: 0.15
+    formation: 7
+    secondaryFormation: 2
+    totalSets: 2
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 2: DUAL FLANKING INCURSION'
+    interwaveEventAfter: 0
+    fireIntervalMin: 1.2
+    fireIntervalMax: 1.8
+    formationSwaySpeed: 1.2
+    enemyHealthMultiplier: 1.1
+    projectileSpeedMultiplier: 1
+    doubleShotChance: 0.2
+    diveIntervalMin: 4.5
+    diveIntervalMax: 7
+    aimedShotChance: 0.1
+  - waveName: Arrowhead Chevron
+    enemyCount: 28
+    gridRows: 3
+    gridColumns: 9
+    spawnInterval: 0.03
+    fighterRatio: 0.3
+    formation: 2
+    secondaryFormation: 6
+    totalSets: 2
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 3: ARROWHEAD CHEVRON'
+    interwaveEventAfter: 1
+    fireIntervalMin: 1
+    fireIntervalMax: 1.6
+    formationSwaySpeed: 1.4
+    enemyHealthMultiplier: 1.2
+    projectileSpeedMultiplier: 1.05
+    doubleShotChance: 0.25
+    diveIntervalMin: 3.5
+    diveIntervalMax: 5.5
+    aimedShotChance: 0.2
+  - waveName: Hazard Belt
+    enemyCount: 32
+    gridRows: 4
+    gridColumns: 8
+    spawnInterval: 0.03
+    fighterRatio: 0.35
+    formation: 4
+    secondaryFormation: 7
+    totalSets: 2
+    spawnAsteroid: 1
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 4: HAZARD BELT INCURSION'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.9
+    fireIntervalMax: 1.5
+    formationSwaySpeed: 1.5
+    enemyHealthMultiplier: 1.3
+    projectileSpeedMultiplier: 1.1
+    doubleShotChance: 0.3
+    diveIntervalMin: 3.2
+    diveIntervalMax: 5
+    aimedShotChance: 0.25
+  - waveName: ELITE VANGUARD
+    enemyCount: 16
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.035
+    fighterRatio: 0.5
+    formation: 5
+    secondaryFormation: 2
+    totalSets: 2
+    spawnAsteroid: 0
+    isMiniBossWave: 1
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Gunship Corsair
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WARNING: ELITE CORSAIR DETECTED!'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.85
+    fireIntervalMax: 1.4
+    formationSwaySpeed: 1.6
+    enemyHealthMultiplier: 1.4
+    projectileSpeedMultiplier: 1.15
+    doubleShotChance: 0.35
+    diveIntervalMin: 3
+    diveIntervalMax: 5
+    aimedShotChance: 0.25
+  - waveName: Twin Crescent Enclosure
+    enemyCount: 30
+    gridRows: 3
+    gridColumns: 10
+    spawnInterval: 0.03
+    fighterRatio: 0.45
+    formation: 6
+    secondaryFormation: 3
+    totalSets: 2
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 6: CRESCENT ENCLOSURE'
+    interwaveEventAfter: 2
+    fireIntervalMin: 0.8
+    fireIntervalMax: 1.3
+    formationSwaySpeed: 1.7
+    enemyHealthMultiplier: 1.5
+    projectileSpeedMultiplier: 1.2
+    doubleShotChance: 0.4
+    diveIntervalMin: 2.8
+    diveIntervalMax: 4.2
+    aimedShotChance: 0.3
+  - waveName: Echelon Diagonal Blitz
+    enemyCount: 35
+    gridRows: 4
+    gridColumns: 10
+    spawnInterval: 0.025
+    fighterRatio: 0.6
+    formation: 8
+    secondaryFormation: 0
+    totalSets: 2
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 7: ECHELON DIAGONAL BLITZ'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.7
+    fireIntervalMax: 1.2
+    formationSwaySpeed: 1.8
+    enemyHealthMultiplier: 1.6
+    projectileSpeedMultiplier: 1.25
+    doubleShotChance: 0.45
+    diveIntervalMin: 2.6
+    diveIntervalMax: 3.8
+    aimedShotChance: 0.35
+  - waveName: Armored Asteroid Wall
+    enemyCount: 36
+    gridRows: 3
+    gridColumns: 12
+    spawnInterval: 0.025
+    fighterRatio: 0.65
+    formation: 4
+    secondaryFormation: 5
+    totalSets: 2
+    spawnAsteroid: 1
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 8: ARMORED METEOR WALL'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.6
+    fireIntervalMax: 1.1
+    formationSwaySpeed: 2
+    enemyHealthMultiplier: 1.75
+    projectileSpeedMultiplier: 1.3
+    doubleShotChance: 0.5
+    diveIntervalMin: 2.4
+    diveIntervalMax: 3.6
+    aimedShotChance: 0.4
+  - waveName: Grand Armada Fleet
+    enemyCount: 42
+    gridRows: 4
+    gridColumns: 11
+    spawnInterval: 0.02
+    fighterRatio: 0.75
+    formation: 5
+    secondaryFormation: 6
+    totalSets: 3
+    spawnAsteroid: 1
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'WAVE 9: GRAND ARMADA (3 SETS)'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.5
+    fireIntervalMax: 0.95
+    formationSwaySpeed: 2.2
+    enemyHealthMultiplier: 2
+    projectileSpeedMultiplier: 1.35
+    doubleShotChance: 0.6
+    diveIntervalMin: 1.8
+    diveIntervalMax: 2.8
+    aimedShotChance: 0.5
+  - waveName: COMMANDER FLAGSHIP
+    enemyCount: 0
+    gridRows: 3
+    gridColumns: 8
+    spawnInterval: 0.05
+    fighterRatio: 0
+    formation: 0
+    secondaryFormation: 2
+    totalSets: 1
+    spawnAsteroid: 0
+    isMiniBossWave: 0
+    miniBossCount: 1
+    miniBossPoolKey: MiniBossGunship
+    miniBossDisplayName: Mini-Boss
+    miniBossSpawnPosition: {x: 0, y: 7.5, z: 0}
+    waveAnnouncement: 'FINAL WARNING: MOTHERSHIP INBOUND!'
+    interwaveEventAfter: 0
+    fireIntervalMin: 0.8
+    fireIntervalMax: 1.5
+    formationSwaySpeed: 1.3
+    enemyHealthMultiplier: 1
+    projectileSpeedMultiplier: 1
+    doubleShotChance: 0.25
+    diveIntervalMin: 3.5
+    diveIntervalMax: 5.5
+    aimedShotChance: 0.2
+  restBetweenWaves: 2.5
+  hasBoss: 1
+  bossPoolKey: InvaderCarrier
+  bossSpawnDelay: 2
+  bossSpawnPosition: {x: 0, y: 8.5, z: 0}
+  starCreditsReward: 1500
+  scoreTarget: 15000
+  isWarpMission: 0
